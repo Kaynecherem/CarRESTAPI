@@ -6,27 +6,31 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Aspect
 @Component
 public class MonitoringAspect {
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     @AfterThrowing(pointcut = "execution(* hr.algebra.springproject.controller.CarController.*(..))", throwing = "exception")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable exception) {
-        System.out.println("Exception thrown in method " + joinPoint.getSignature() + ": " + exception.getMessage());
+        logger.info("Exception thrown in method " + joinPoint.getSignature() + ": " + exception.getMessage());
     }
 
     @AfterReturning("execution(* hr.algebra.springproject.controller.CarController.createCar(..))")
     public void logCarCreation(JoinPoint joinPoint) {
-        System.out.println("A new car has been created.");
+        logger.info("A new car has been created.");
     }
 
     @AfterReturning("execution(* hr.algebra.springproject.controller.CarController.updateCar(..))")
     public void logCarUpdate(JoinPoint joinPoint) {
-        System.out.println("A car has been updated.");
+        logger.info("A car has been updated.");
     }
 
     @AfterReturning("execution(* hr.algebra.springproject.controller.CarController.deleteCarById(..)) || execution(* hr.algebra.springproject.controller.CarController.deleteCar(..))")
     public void logCarDelete(JoinPoint joinPoint) {
-        System.out.println("A car has been deleted.");
+        logger.info("A car has been deleted.");
     }
 }
